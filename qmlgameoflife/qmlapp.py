@@ -13,11 +13,13 @@ Hosted at https://github.com/pkobrien/qml-game-of-life
 #from PyQt5.QtQuick import QQuickPaintedItem, QQuickView
 
 
+from PyQt5.QtCore import QUrl
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
+from PyQt5.QtQuick import QQuickView
 
-import gameoflife as gol
-import qmlgameoflife as qmlgol
+#import gameoflife as gol
+#import qmlgameoflife as qmlgol
 import random
 
 
@@ -34,9 +36,5 @@ if __name__ == '__main__':
     app = QGuiApplication(sys.argv)
     qml_filename = os.path.join(os.path.dirname(__file__), 'main.qml')
     engine = QQmlApplicationEngine(qml_filename)
-#    view = QQuickView()
-#    view.setResizeMode(QQuickView.SizeRootObjectToView)
-#    view.setSource(QUrl.fromLocalFile(
-#        os.path.join(os.path.dirname(__file__), 'app.qml')))
-#    view.show()
+#    engine.quit.connect(app.quit)
     sys.exit(app.exec_())
