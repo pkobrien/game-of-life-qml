@@ -3,29 +3,44 @@ import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.1
 
 Item {
-    width: 640
-    height: 480
+    width: 400
+    height: 400
 
-    property alias button3: button3
-    property alias button2: button2
-    property alias button1: button1
+    Grid {
+        id: universe
+        x: 0
+        y: 0
+        width: 400
+        height: 400
+        rows: 40
+        columns: 40
 
-    RowLayout {
-        anchors.centerIn: parent
+        Repeater {
+            model: parent.rows * parent.columns
 
-        Button {
-            id: button1
-            text: qsTr("Press Me 1")
-        }
+            Rectangle {
+                id: cell
+                width: 10
+                height: 10
+                border.color: "white"
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: "#ffffff"
+                    }
 
-        Button {
-            id: button2
-            text: qsTr("Press Me 2")
-        }
+                    GradientStop {
+                        position: 1
+                        color: "#000000"
+                    }
+                }
 
-        Button {
-            id: button3
-            text: qsTr("Press Me 3")
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+
+                }
+            }
         }
     }
 }
