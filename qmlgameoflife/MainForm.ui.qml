@@ -2,26 +2,24 @@ import QtQuick 2.4
 import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.1
 
-Item {
+Rectangle {
+    id: page
     width: 400
     height: 400
 
     Grid {
         id: universe
-        x: 0
-        y: 0
-        width: 400
-        height: 400
+        anchors.fill: parent
         rows: 40
         columns: 40
 
         Repeater {
-            model: parent.rows * parent.columns
+            model: universe.rows * universe.columns
 
             Rectangle {
-                id: cell
-                width: 10
-                height: 10
+                id: block
+                width: page.width / universe.rows
+                height: page.height / universe.columns
                 border.color: "white"
                 gradient: Gradient {
                     GradientStop {
@@ -43,4 +41,5 @@ Item {
             }
         }
     }
+    Component.onCompleted: mediator.setup(universe)
 }

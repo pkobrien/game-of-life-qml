@@ -13,20 +13,34 @@ Hosted at https://github.com/pkobrien/qml-game-of-life
 #from PyQt5.QtQuick import QQuickPaintedItem, QQuickView
 
 
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import pyqtSlot, QObject, QUrl
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
 from PyQt5.QtQuick import QQuickView
 
-#import gameoflife as gol
+import gameoflife as gol
 #import qmlgameoflife as qmlgol
 import random
 
 
+class Mediator(QObject):
+
+    def __init__(self):
+        super(Mediator, self).__init__()
+        self.grid = gol.Grid(40, 40)
+
+    @pyqtSlot(QObject)
+    def setup(self, universe):
+        pass
+#        print(universe.children()[0].width())
+#        block = universe.children()[0]
+#        block.setColor('#000000')
+
+
 def _bug_fix():
     """PyQt needs help finding plugins directory in a virtual environment."""
-    paths = [os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 
-             'env/Lib/site-packages/PyQt5/plugins'))]
+    paths = [os.path.abspath(os.path.join(os.path.dirname(__file__),
+             os.path.pardir, 'env/Lib/site-packages/PyQt5/plugins'))]
     import PyQt5.QtCore
     PyQt5.QtCore.QCoreApplication.setLibraryPaths(paths)
 
@@ -36,6 +50,17 @@ if __name__ == '__main__':
     import sys
     _bug_fix()
     app = QGuiApplication(sys.argv)
-    qml_filename = os.path.join(os.path.dirname(__file__), 'main.qml')
-    engine = QQmlApplicationEngine(qml_filename)
+
+#    qml_filename = os.path.join(os.path.dirname(__file__), 'main.qml')
+#    engine = QQmlApplicationEngine(qml_filename)
+
+    view = QQuickView()
+    view.setResizeMode(QQuickView.SizeRootObjectToView)
+    mediator = Mediator()
+    context = view.rootContext()
+    context.setContextProperty('mediator', mediator)
+    qml_filename = os.path.join(os.path.dirname(__file__), 'MainForm.ui.qml')
+    view.setSource(QUrl(qml_filename))
+    view.show()
+
     sys.exit(app.exec_())
