@@ -5,41 +5,62 @@ import QtQuick.Layouts 1.1
 Rectangle {
     id: page
     width: 400
-    height: 400
+    height: 500
 
-    Grid {
-        id: universe
+ColumnLayout {
+    id: layout
         anchors.fill: parent
-        rows: 40
-        columns: 40
 
-        Repeater {
-            model: universe.rows * universe.columns
+        Button {
+            id: button1
+            x: 0
+            y: 0
+            text: qsTr("Populate")
+            anchors.top: parent.top
+            onClicked: game.populate();
+        }
 
-            Rectangle {
-                id: block
-                width: page.width / universe.rows
-                height: page.height / universe.columns
-                border.color: "white"
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0
-                        color: "#ffffff"
+        Rectangle {
+            id: board
+            width: 400
+            height: 400
+
+            Grid {
+                id: universe
+                anchors.fill: parent
+                rows: 40
+                columns: 40
+
+                Repeater {
+                    model: universe.rows * universe.columns
+
+                    Rectangle {
+                        id: block
+                        width: board.width / universe.rows
+                        height: board.height / universe.columns
+                        border.color: "white"
+                        gradient: Gradient {
+                            GradientStop {
+                                position: 0
+                                color: "#ffffff"
+                            }
+
+                            GradientStop {
+                                position: 1
+                                color: "#000000"
+                            }
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+
+                        }
                     }
-
-                    GradientStop {
-                        position: 1
-                        color: "#000000"
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-
                 }
             }
         }
-    }
-    Component.onCompleted: mediator.setup(universe)
+
+}
+
 }

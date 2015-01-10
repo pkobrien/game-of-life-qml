@@ -13,7 +13,8 @@ Hosted at https://github.com/pkobrien/qml-game-of-life
 #from PyQt5.QtQuick import QQuickPaintedItem, QQuickView
 
 
-from PyQt5.QtCore import pyqtSlot, QObject, QUrl
+from PyQt5.QtCore import (pyqtProperty, pyqtSignal, pyqtSlot,
+                          QObject, QTimer, QUrl)
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
 from PyQt5.QtQuick import QQuickView
@@ -23,18 +24,109 @@ import gameoflife as gol
 import random
 
 
-class Mediator(QObject):
+def sample_population():
+    """Return a sample population of cells."""
+    glideright = {(0, 0), (1, 0), (1, 2), (2, 0), (2, 1)}
+    return (gol.offset(gol.GLIDER, 0, 0) | 
+            gol.offset(gol.BEACON, 2, 10) | 
+            gol.offset(gol.BLINKER, 10, 2) |
+            gol.offset(gol.GLIDER, 20, 7) |
+            gol.offset(glideright, 37, 0))
+
+
+class Game(QObject):
+    
+    cells_init = pyqtSignal(set)
+    cells_born = pyqtSignal(set)
+    cells_died = pyqtSignal(set)
+    cycled = pyqtSignal()
+    populated = pyqtSignal()
+    started = pyqtSignal()
+    stopped = pyqtSignal()
 
     def __init__(self):
-        super(Mediator, self).__init__()
-        self.grid = gol.Grid(40, 40)
+        super(Game, self).__init__()
+        self._grid = gol.Grid()
+        self._history = []
+        self._stabilized = False
+        self._timer = QTimer()
+        self._timer.timeout.connect(self._on_time)
 
-    @pyqtSlot(QObject)
-    def setup(self, universe):
-        pass
-#        print(universe.children()[0].width())
-#        block = universe.children()[0]
-#        block.setColor('#000000')
+    @property
+    def dead_count(self):
+        return self._grid.dead_count
+
+    @property
+    def generations(self):
+        return self._grid.generations
+
+    @property
+    def height(self):
+        return self._grid.height
+
+    @property
+    def live_count(self):
+        return self._grid.live_count
+
+    @property
+    def new_born_count(self):
+        return self._grid.new_born_count
+
+    @property
+    def new_dead_count(self):
+        return self._grid.new_dead_count
+
+    @property
+    def stabilized(self):
+        return self._stabilized
+
+    @property
+    def width(self):
+        return self._grid.width
+
+    def cycle(self):
+        if self._check_history():
+            self.stop()
+            self._stabilized = True
+        self.cells_born.emit(self._grid.new_born)
+        self.cells_died.emit(self._grid.new_dead)
+        self.cycled.emit()
+        self._grid.cycle()
+
+    @pyqtSlot()
+    def populate(self, width=0, height=0, population=None):
+        self.stop()
+        if population is None:
+            population = sample_population()
+        self._grid.width = width
+        self._grid.height = height
+        self._grid.populate(population)
+        self._reset()
+        self.cells_init.emit(self._grid.living)
+        self.populated.emit()
+        self.cycle()
+
+    def start(self, msec_delay):
+        self._timer.start(msec_delay)
+        self.started.emit()
+
+    def stop(self):
+        self._timer.stop()
+        self.stopped.emit()
+
+    def _check_history(self):
+        if len(self._history) > 5:
+            self._history.pop()
+        if self._grid.living in self._history:
+            return True
+        self._history.insert(0, self._grid.living)
+
+    def _on_time(self):
+        self.cycle()
+
+    def _reset(self):
+        self._history = []
+        self._stabilized = False
 
 
 def _bug_fix():
@@ -56,9 +148,9 @@ if __name__ == '__main__':
 
     view = QQuickView()
     view.setResizeMode(QQuickView.SizeRootObjectToView)
-    mediator = Mediator()
+    game = Game()
     context = view.rootContext()
-    context.setContextProperty('mediator', mediator)
+    context.setContextProperty('game', game)
     qml_filename = os.path.join(os.path.dirname(__file__), 'MainForm.ui.qml')
     view.setSource(QUrl(qml_filename))
     view.show()
