@@ -7,8 +7,28 @@ Rectangle {
     width: 400
     height: 500
 
-ColumnLayout {
-    id: layout
+    function setup(cells) {
+        console.log("setup");
+        console.log(cells);
+    }
+
+    function setup_cell(cell) {
+        console.log(cell);
+    }
+
+    Component.onCompleted: {
+        game.cellsInit.connect(setup);
+    }
+
+    Connections {
+        target: game
+        onCellsInit: {
+            console.log("onCellsInit");
+        }
+    }
+
+    ColumnLayout {
+        id: layout
         anchors.fill: parent
 
         Button {
@@ -60,7 +80,5 @@ ColumnLayout {
                 }
             }
         }
-
-}
-
+    }
 }

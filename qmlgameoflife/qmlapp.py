@@ -36,9 +36,9 @@ def sample_population():
 
 class Game(QObject):
     
-    cells_init = pyqtSignal(set)
-    cells_born = pyqtSignal(set)
-    cells_died = pyqtSignal(set)
+    cellsInit = pyqtSignal(set)
+    cellsBorn = pyqtSignal(set)
+    cellsDied = pyqtSignal(set)
     cycled = pyqtSignal()
     populated = pyqtSignal()
     started = pyqtSignal()
@@ -88,8 +88,8 @@ class Game(QObject):
         if self._check_history():
             self.stop()
             self._stabilized = True
-        self.cells_born.emit(self._grid.new_born)
-        self.cells_died.emit(self._grid.new_dead)
+        self.cellsBorn.emit(self._grid.new_born)
+        self.cellsDied.emit(self._grid.new_dead)
         self.cycled.emit()
         self._grid.cycle()
 
@@ -102,7 +102,7 @@ class Game(QObject):
         self._grid.height = height
         self._grid.populate(population)
         self._reset()
-        self.cells_init.emit(self._grid.living)
+        self.cellsInit.emit(self._grid.living)
         self.populated.emit()
         self.cycle()
 
