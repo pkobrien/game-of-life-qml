@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.1
 
 Rectangle {
     id: page
-    width: 400
-    height: 500
+    width: 600
+    height: 640
 
     Connections {
         target: game
@@ -17,6 +17,11 @@ Rectangle {
         }
         onCellDied: {
             universe.children[index].color = "#ffffff"
+        }
+        onReset: {
+            for (var i = 0; i < universe.rows * universe.columns; i++) {
+                universe.children[i].color = "#999999"
+            }
         }
     }
 
@@ -30,7 +35,7 @@ Rectangle {
             Button {
                 id: populateButton
                 text: qsTr("Populate")
-                onClicked: game.populate()
+                onClicked: game.populate(universe.columns, universe.rows)
             }
 
             Button {
@@ -42,24 +47,24 @@ Rectangle {
 
         Rectangle {
             id: board
-            width: 400
-            height: 400
+            width: 600
+            height: 600
 
             Grid {
                 id: universe
                 anchors.fill: parent
-                rows: 40
-                columns: 40
+                columns: 100
+                rows: 100
 
                 Repeater {
-                    model: universe.rows * universe.columns
+                    model: universe.columns * universe.rows
 
                     Rectangle {
                         id: block
-                        width: board.width / universe.rows
-                        height: board.height / universe.columns
+                        width: board.width / universe.columns
+                        height: board.height / universe.rows
                         border.color: "lightGray"
-                        color: "gray"
+                        color: "#999999"
                     }
                 }
             }

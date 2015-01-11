@@ -24,14 +24,12 @@ import gameoflife as gol
 import random
 
 
-def sample_population():
-    """Return a sample population of cells."""
-    glideright = {(0, 0), (1, 0), (1, 2), (2, 0), (2, 1)}
-    return (gol.offset(gol.GLIDER, 0, 0) | 
-            gol.offset(gol.BEACON, 2, 10) | 
-            gol.offset(gol.BLINKER, 10, 2) |
-            gol.offset(gol.GLIDER, 20, 7) |
-            gol.offset(glideright, 37, 0))
+def random_population(width, height):
+    """Return a random population of cells."""
+    area = width * height
+    count = random.randint(area/4, area/2)
+    return {(random.randint(0, width-1), random.randint(0, height-1))
+            for n in range(count)}
 
 
 class Game(QObject):
@@ -101,15 +99,13 @@ class Game(QObject):
         index = x + (y * self.width)
         return index
 
-    @pyqtSlot()
-    def populate(self, width=0, height=0, population=None):
+    @pyqtSlot(int, int)
+    def populate(self, width, height, population=None):
         self.stop()
         self._grid.width = width
         self._grid.height = height
         if population is None:
-            self._grid.width = 40
-            self._grid.height = 40
-            population = sample_population()
+            population = random_population(width, height)
         self._grid.populate(population)
         self._reset()
         self.reset.emit()
