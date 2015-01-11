@@ -36,11 +36,12 @@ def sample_population():
 
 class Game(QObject):
     
-    cellsInit = pyqtSignal(set)
-    cellsBorn = pyqtSignal(set)
-    cellsDied = pyqtSignal(set)
+    cellInit = pyqtSignal(int, arguments=['index'])
+    cellBorn = pyqtSignal(int, arguments=['index'])
+    cellDied = pyqtSignal(int, arguments=['index'])
     cycled = pyqtSignal()
     populated = pyqtSignal()
+    reset = pyqtSignal()
     started = pyqtSignal()
     stopped = pyqtSignal()
 
@@ -88,28 +89,41 @@ class Game(QObject):
         if self._check_history():
             self.stop()
             self._stabilized = True
-        self.cellsBorn.emit(self._grid.new_born)
-        self.cellsDied.emit(self._grid.new_dead)
+        for cell in self._grid.new_born:
+            self.cellBorn.emit(self.index(cell))
+        for cell in self._grid.new_dead:
+            self.cellDied.emit(self.index(cell))
         self.cycled.emit()
         self._grid.cycle()
+
+    def index(self, cell):
+        x, y = cell
+        index = x + (y * self.width)
+        return index
 
     @pyqtSlot()
     def populate(self, width=0, height=0, population=None):
         self.stop()
-        if population is None:
-            population = sample_population()
         self._grid.width = width
         self._grid.height = height
+        if population is None:
+            self._grid.width = 40
+            self._grid.height = 40
+            population = sample_population()
         self._grid.populate(population)
         self._reset()
-        self.cellsInit.emit(self._grid.living)
+        self.reset.emit()
+        for cell in self._grid.living:
+            self.cellInit.emit(self.index(cell))
         self.populated.emit()
         self.cycle()
 
-    def start(self, msec_delay):
+    @pyqtSlot()
+    def start(self, msec_delay=0):
         self._timer.start(msec_delay)
         self.started.emit()
 
+    @pyqtSlot()
     def stop(self):
         self._timer.stop()
         self.stopped.emit()

@@ -7,37 +7,37 @@ Rectangle {
     width: 400
     height: 500
 
-    function setup(cells) {
-        console.log("setup");
-        console.log(cells);
-    }
-
-    function setup_cell(cell) {
-        console.log(cell);
-    }
-
-    Component.onCompleted: {
-        game.cellsInit.connect(setup);
-    }
-
     Connections {
         target: game
-        onCellsInit: {
-            console.log("onCellsInit");
+        onCellInit: {
+            universe.children[index].color = "#000000"
+        }
+        onCellBorn: {
+            universe.children[index].color = "#000000"
+        }
+        onCellDied: {
+            universe.children[index].color = "#ffffff"
         }
     }
 
     ColumnLayout {
-        id: layout
+        id: mainLayout
         anchors.fill: parent
 
-        Button {
-            id: button1
-            x: 0
-            y: 0
-            text: qsTr("Populate")
-            anchors.top: parent.top
-            onClicked: game.populate();
+        RowLayout {
+        id: buttonLayout
+
+            Button {
+                id: populateButton
+                text: qsTr("Populate")
+                onClicked: game.populate()
+            }
+
+            Button {
+                id: startButton
+                text: qsTr("Start")
+                onClicked: game.start()
+            }
         }
 
         Rectangle {
@@ -58,24 +58,8 @@ Rectangle {
                         id: block
                         width: board.width / universe.rows
                         height: board.height / universe.columns
-                        border.color: "white"
-                        gradient: Gradient {
-                            GradientStop {
-                                position: 0
-                                color: "#ffffff"
-                            }
-
-                            GradientStop {
-                                position: 1
-                                color: "#000000"
-                            }
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            hoverEnabled: true
-
-                        }
+                        border.color: "lightGray"
+                        color: "gray"
                     }
                 }
             }
