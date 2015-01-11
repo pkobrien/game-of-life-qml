@@ -5,13 +5,6 @@ Main application for PyQt QML Game Of Life.
 Hosted at https://github.com/pkobrien/qml-game-of-life
 """
 
-#from PyQt5.QtCore import QTimer
-#
-#from PyQt5.QtCore import pyqtProperty, QRectF, Qt, QUrl
-#from PyQt5.QtGui import QBrush, QColor, QGuiApplication, QPainter, QPen
-#from PyQt5.QtQml import qmlRegisterType, QQmlComponent, QQmlEngine
-#from PyQt5.QtQuick import QQuickPaintedItem, QQuickView
-
 
 from PyQt5.QtCore import (pyqtProperty, pyqtSignal, pyqtSlot,
                           QObject, QTimer, QUrl)
@@ -20,7 +13,6 @@ from PyQt5.QtQml import QQmlApplicationEngine
 from PyQt5.QtQuick import QQuickView
 
 import gameoflife as gol
-#import qmlgameoflife as qmlgol
 import random
 
 
@@ -51,38 +43,39 @@ class Game(QObject):
         self._timer = QTimer()
         self._timer.timeout.connect(self._on_time)
 
-    @property
+    @pyqtProperty(int, notify=cycled)
     def dead_count(self):
         return self._grid.dead_count
 
-    @property
+    @pyqtProperty(int, notify=cycled)
     def generations(self):
         return self._grid.generations
 
-    @property
+    @pyqtProperty(int, notify=populated)
     def height(self):
         return self._grid.height
 
-    @property
+    @pyqtProperty(int, notify=cycled)
     def live_count(self):
         return self._grid.live_count
 
-    @property
+    @pyqtProperty(int, notify=cycled)
     def new_born_count(self):
         return self._grid.new_born_count
 
-    @property
+    @pyqtProperty(int, notify=cycled)
     def new_dead_count(self):
         return self._grid.new_dead_count
 
-    @property
+    @pyqtProperty(bool, notify=cycled)
     def stabilized(self):
         return self._stabilized
 
-    @property
+    @pyqtProperty(int, notify=populated)
     def width(self):
         return self._grid.width
 
+    @pyqtSlot()
     def cycle(self):
         if self._check_history():
             self.stop()
@@ -153,16 +146,20 @@ if __name__ == '__main__':
     _bug_fix()
     app = QGuiApplication(sys.argv)
 
-#    qml_filename = os.path.join(os.path.dirname(__file__), 'main.qml')
-#    engine = QQmlApplicationEngine(qml_filename)
-
-    view = QQuickView()
-    view.setResizeMode(QQuickView.SizeRootObjectToView)
     game = Game()
-    context = view.rootContext()
+
+    engine = QQmlApplicationEngine()
+    context = engine.rootContext()
     context.setContextProperty('game', game)
-    qml_filename = os.path.join(os.path.dirname(__file__), 'MainForm.ui.qml')
-    view.setSource(QUrl(qml_filename))
-    view.show()
+    qml_filename = os.path.join(os.path.dirname(__file__), 'main.qml')
+    engine.load(qml_filename)
+
+#    view = QQuickView()
+#    view.setResizeMode(QQuickView.SizeRootObjectToView)
+#    context = view.rootContext()
+#    context.setContextProperty('game', game)
+#    qml_filename = os.path.join(os.path.dirname(__file__), 'MainForm.ui.qml')
+#    view.setSource(QUrl(qml_filename))
+#    view.show()
 
     sys.exit(app.exec_())
