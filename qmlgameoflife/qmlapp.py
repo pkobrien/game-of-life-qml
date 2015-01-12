@@ -6,20 +6,18 @@ Hosted at https://github.com/pkobrien/qml-game-of-life
 """
 
 
-from PyQt5.QtCore import (pyqtProperty, pyqtSignal, pyqtSlot,
-                          QObject, QTimer, QUrl)
+from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot, QObject, QTimer
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
-from PyQt5.QtQuick import QQuickView
 
 import gameoflife as gol
 import random
 
 
 def random_population(width, height):
-    """Return a random population of cells."""
+    """Return a set containing a random population of cells."""
     area = width * height
-    count = random.randint(area/4, area/2)
+    count = random.randint(area//20, area//2)
     return {(random.randint(0, width-1), random.randint(0, height-1))
             for n in range(count)}
 
@@ -145,21 +143,10 @@ if __name__ == '__main__':
     import sys
     _bug_fix()
     app = QGuiApplication(sys.argv)
-
     game = Game()
-
     engine = QQmlApplicationEngine()
     context = engine.rootContext()
     context.setContextProperty('game', game)
     qml_filename = os.path.join(os.path.dirname(__file__), 'main.qml')
     engine.load(qml_filename)
-
-#    view = QQuickView()
-#    view.setResizeMode(QQuickView.SizeRootObjectToView)
-#    context = view.rootContext()
-#    context.setContextProperty('game', game)
-#    qml_filename = os.path.join(os.path.dirname(__file__), 'MainForm.ui.qml')
-#    view.setSource(QUrl(qml_filename))
-#    view.show()
-
     sys.exit(app.exec_())

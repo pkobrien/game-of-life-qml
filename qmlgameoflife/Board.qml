@@ -7,36 +7,20 @@ Rectangle {
     width: 300
     height: 300
 
+    property alias blocks: universe.children
+
     property int columns: 20
     property int rows: 20
 
-    Connections {
-        target: game
-        onCellInit: {
-            universe.children[index].color = universe.liveColor
-        }
-        onCellBorn: {
-            universe.children[index].color = universe.liveColor
-        }
-        onCellDied: {
-            universe.children[index].color = universe.deadColor
-        }
-        onReset: {
-            for (var i = 0; i < universe.columns * universe.rows; i++) {
-                universe.children[i].color = universe.emptyColor
-            }
-        }
-    }
+    property color emptyColor: "#999999"
+    property color deadColor: "#ffffff"
+    property color liveColor: "#000000"
 
     Grid {
         id: universe
         anchors.fill: parent
         columns: board.columns
         rows: board.rows
-
-        property color emptyColor: "#999999"
-        property color deadColor: "#ffffff"
-        property color liveColor: "#000000"
 
         Repeater {
             model: universe.columns * universe.rows
@@ -45,7 +29,7 @@ Rectangle {
                 width: board.width / universe.columns
                 height: board.height / universe.rows
                 border.color: "#cccccc"
-                color: universe.emptyColor
+                color: board.emptyColor
             }
         }
     }
