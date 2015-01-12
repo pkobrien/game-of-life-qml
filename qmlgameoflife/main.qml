@@ -19,73 +19,18 @@ ApplicationWindow {
         }
     }
 
-    toolBar: ToolBar {
-        RowLayout {
-            anchors.fill: parent
-            ToolButton {
-                text: qsTr("Populate")
-                onClicked: game.populate(board.columns, board.rows)
-            }
-            ToolButton {
-                id: startButton
-                text: startText
-                property string startText: qsTr("Start")
-                property string stopText: qsTr("Stop")
-                onClicked: {
-                    if (text == startText) {
-                        game.start()
-                    }
-                    else {
-                        game.stop()
-                    }
-                }
-            }
-            ToolButton {
-                text: qsTr("Cycle")
-                onClicked: game.cycle()
-            }
-        }
+    toolBar: GolToolBar {
+        anchors.fill: parent
     }
 
-    Board {
+    GolBoard {
         id: board
         anchors.fill: parent
         columns: 50
         rows: 50
     }
 
-    statusBar: StatusBar {
-        RowLayout {
-            anchors.fill: parent
-            Label { text: qsTr("Area: %L1 cells").arg(game.width * game.height) }
-            Label { text: qsTr("Generations: %L1").arg(game.generations) }
-            Label { text: qsTr("Population: %L1 Living, %L2 Dead").arg(game.live_count).arg(game.dead_count) }
-            Label { text: qsTr("Nursery: %L1 Newborn").arg(game.new_born_count) }
-            Label { text: qsTr("Cemetery: %L1 Deceased").arg(game.new_dead_count) }
-        }
-    }
-
-    Connections {
-        target: game
-        onCellInit: {
-            board.blocks[index].color = board.liveColor
-        }
-        onCellBorn: {
-            board.blocks[index].color = board.liveColor
-        }
-        onCellDied: {
-            board.blocks[index].color = board.deadColor
-        }
-        onReset: {
-            for (var i = 0; i < board.columns * board.rows; i++) {
-                board.blocks[i].color = board.emptyColor
-            }
-        }
-        onStarted: {
-            startButton.text = startButton.stopText
-        }
-        onStopped: {
-            startButton.text = startButton.startText
-        }
+    statusBar: GolStatusBar {
+        anchors.fill: parent
     }
 }
