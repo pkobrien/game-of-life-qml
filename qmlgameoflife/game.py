@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Main application for PyQt QML Game Of Life.
+Main Game class for PyQt QML Game Of Life.
 
 Hosted at https://github.com/pkobrien/qml-game-of-life
 """
 
-
 from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot, QObject, QTimer
-from PyQt5.QtGui import QGuiApplication
-from PyQt5.QtQml import QQmlApplicationEngine
 
 import gameoflife as gol
 import random
@@ -23,6 +20,9 @@ def random_population(width, height):
 
 
 class Game(QObject):
+    """Proxy class that handles all interactions with the gol.Grid.
+    
+    This class does not have any UI elements. Instead it emits signals."""
     
     cellInit = pyqtSignal(int, arguments=['index'])
     cellBorn = pyqtSignal(int, arguments=['index'])
@@ -128,25 +128,3 @@ class Game(QObject):
     def _reset(self):
         self._history = []
         self._stabilized = False
-
-
-def _bug_fix():
-    """PyQt needs help finding plugins directory in a virtual environment."""
-    paths = [os.path.abspath(os.path.join(os.path.dirname(__file__),
-             os.path.pardir, 'env/Lib/site-packages/PyQt5/plugins'))]
-    import PyQt5.QtCore
-    PyQt5.QtCore.QCoreApplication.setLibraryPaths(paths)
-
-
-if __name__ == '__main__':
-    import os
-    import sys
-    _bug_fix()
-    app = QGuiApplication(sys.argv)
-    game = Game()
-    engine = QQmlApplicationEngine()
-    context = engine.rootContext()
-    context.setContextProperty('game', game)
-    qml_filename = os.path.join(os.path.dirname(__file__), 'main.qml')
-    engine.load(qml_filename)
-    sys.exit(app.exec_())
