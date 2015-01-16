@@ -4,9 +4,9 @@ import QtQuick.Layouts 1.1
 
 ToolBar {
 
-    property ToolButton cycleButton: cycleButton
-    property ToolButton populateButton: populateButton
-    property ToolButton startButton: startButton
+    property alias cycleButton: cycleButton
+    property alias populateButton: populateButton
+    property alias startButton: startButton
 
     width: 300
 
