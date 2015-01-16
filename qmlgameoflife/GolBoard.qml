@@ -5,14 +5,20 @@ GolBoardForm {
 
     Connections {
         target: game
-        onCellInit: {
-            board.blocks[index].color = board.liveColor
+        onCellsBorn: {
+            for (var i = 0; i < indices.length; i++) {
+                board.blocks[indices[i]].color = board.liveColor
+            }
         }
-        onCellBorn: {
-            board.blocks[index].color = board.liveColor
+        onCellsDied: {
+            for (var i = 0; i < indices.length; i++) {
+                board.blocks[indices[i]].color = board.deadColor
+            }
         }
-        onCellDied: {
-            board.blocks[index].color = board.deadColor
+        onCellsInit: {
+            for (var i = 0; i < indices.length; i++) {
+                board.blocks[indices[i]].color = board.liveColor
+            }
         }
         onReset: {
             for (var i = 0; i < board.columns * board.rows; i++) {

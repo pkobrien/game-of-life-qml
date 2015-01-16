@@ -26,8 +26,8 @@ ApplicationWindow {
     GolBoard {
         id: board
         anchors.fill: parent
-        columns: 50
-        rows: 50
+        columns: 100
+        rows: 100
     }
 
     statusBar: GolStatusBar {

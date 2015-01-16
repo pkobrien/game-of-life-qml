@@ -5,7 +5,8 @@ Main Game class for PyQt QML Game Of Life.
 Hosted at https://github.com/pkobrien/qml-game-of-life
 """
 
-from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot, QObject, QTimer
+from PyQt5.QtCore import (pyqtProperty, pyqtSignal, pyqtSlot, QObject, 
+                          QTimer, QVariant)
 
 import gameoflife as gol
 import random
@@ -24,9 +25,9 @@ class Game(QObject):
     
     This class does not have any UI elements. Instead it emits signals."""
     
-    cellInit = pyqtSignal(int, arguments=['index'])
-    cellBorn = pyqtSignal(int, arguments=['index'])
-    cellDied = pyqtSignal(int, arguments=['index'])
+    cellsBorn = pyqtSignal(QVariant, arguments=['indices'])
+    cellsDied = pyqtSignal(QVariant, arguments=['indices'])
+    cellsInit = pyqtSignal(QVariant, arguments=['indices'])
     cycled = pyqtSignal()
     populated = pyqtSignal()
     reset = pyqtSignal()
@@ -78,10 +79,8 @@ class Game(QObject):
         if self._check_history():
             self.stop()
             self._stabilized = True
-        for cell in self._grid.new_born:
-            self.cellBorn.emit(self.index(cell))
-        for cell in self._grid.new_dead:
-            self.cellDied.emit(self.index(cell))
+        self.cellsBorn.emit(list(map(self.index, self._grid.new_born)))
+        self.cellsDied.emit(list(map(self.index, self._grid.new_dead)))
         self.cycled.emit()
         self._grid.cycle()
 
@@ -100,8 +99,7 @@ class Game(QObject):
         self._grid.populate(population)
         self._reset()
         self.reset.emit()
-        for cell in self._grid.living:
-            self.cellInit.emit(self.index(cell))
+        self.cellsInit.emit(list(map(self.index, self._grid.living)))
         self.populated.emit()
         self.cycle()
 
