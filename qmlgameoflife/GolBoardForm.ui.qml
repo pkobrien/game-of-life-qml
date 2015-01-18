@@ -12,7 +12,7 @@ Rectangle {
     property int columns: 20
     property int rows: 20
 
-    property color emptyColor: "#999999"
+    property color emptyColor: "#eeeeee"
     property color deadColor: "#ffffff"
     property color liveColor: "#000000"
 
@@ -28,7 +28,6 @@ Rectangle {
             Rectangle {
                 width: board.width / universe.columns
                 height: board.height / universe.rows
-                border.color: "#cccccc"
                 color: board.emptyColor
             }
         }

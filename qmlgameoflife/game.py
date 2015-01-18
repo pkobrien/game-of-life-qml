@@ -76,6 +76,7 @@ class Game(QObject):
 
     @pyqtSlot()
     def cycle(self):
+        """Update grid with the next generation of living cells."""
         if self._check_history():
             self.stop()
             self._stabilized = True
@@ -85,12 +86,23 @@ class Game(QObject):
         self._grid.cycle()
 
     def index(self, cell):
+        """Return the index value for a given (x, y) cell."""
         x, y = cell
         index = x + (y * self.width)
         return index
 
+    @pyqtSlot(int, result=QVariant)
+    def previously_live_neighbors(self, index):
+        """Return list of neighbors of cell at index previously alive."""
+        y, x = divmod(index, self.width)
+        cell = (x, y)
+        prev = self._history[1]
+        live = [neigh for neigh in self._grid.neighbors(cell) if neigh in prev]
+        return list(map(self.index, live))
+
     @pyqtSlot(int, int)
     def populate(self, width, height, population=None):
+        """Seed grid with cells contained in the population set."""
         self.stop()
         self._grid.width = width
         self._grid.height = height
@@ -105,24 +117,31 @@ class Game(QObject):
 
     @pyqtSlot()
     def start(self, msec_delay=0):
+        """Start cycling the grid using a timer with a delay of msec_delay."""
         self._timer.start(msec_delay)
         self.started.emit()
 
     @pyqtSlot()
     def stop(self):
+        """Stop cycling the grid."""
         self._timer.stop()
         self.stopped.emit()
 
     def _check_history(self):
+        """Break simple loops by checking the history."""
+        check = False
         if len(self._history) > 5:
             self._history.pop()
         if self._grid.living in self._history:
-            return True
+            check = True
         self._history.insert(0, self._grid.living)
+        return check
 
     def _on_time(self):
+        """Cycle the grid."""
         self.cycle()
 
     def _reset(self):
+        """Reset to a clean state."""
         self._history = []
         self._stabilized = False
