@@ -9,28 +9,16 @@ ApplicationWindow {
     height: 700
     visible: true
 
-    menuBar: MenuBar {
-        Menu {
-            title: qsTr("&File")
-            MenuItem {
-                text: qsTr("E&xit")
-                onTriggered: Qt.quit();
-            }
-        }
-    }
+    menuBar: GolMenuBar { }
 
-    toolBar: GolToolBar {
-        anchors.fill: parent
-    }
+    toolBar: GolToolBar { }
 
     GolBoard {
         id: board
         anchors.fill: parent
-        columns: 100
-        rows: 100
+        columns: 70
+        rows: 70
     }
 
-    statusBar: GolStatusBar {
-        anchors.fill: parent
-    }
+    statusBar: GolStatusBar { }
 }

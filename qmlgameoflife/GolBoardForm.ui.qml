@@ -7,28 +7,23 @@ Rectangle {
     width: 300
     height: 300
 
-    property alias blocks: universe.children
+    property alias blocks: grid.children
 
     property int columns: 20
     property int rows: 20
 
-    property color emptyColor: "#eeeeee"
-    property color deadColor: "#ffffff"
-    property color liveColor: "#000000"
-
     Grid {
-        id: universe
+        id: grid
         anchors.fill: parent
         columns: board.columns
         rows: board.rows
 
         Repeater {
-            model: universe.columns * universe.rows
+            model: board.columns * board.rows
 
-            Rectangle {
-                width: board.width / universe.columns
-                height: board.height / universe.rows
-                color: board.emptyColor
+            GolBlock {
+                width: board.width / board.columns
+                height: board.height / board.rows
             }
         }
     }

@@ -3,12 +3,12 @@ import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.1
 
 ToolBar {
+    anchors.fill: parent
+    width: 300
 
     property alias cycleButton: cycleButton
     property alias populateButton: populateButton
     property alias startButton: startButton
-
-    width: 300
 
     RowLayout {
         ToolButton {

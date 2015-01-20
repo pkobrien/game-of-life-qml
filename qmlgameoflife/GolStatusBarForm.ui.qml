@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.1
 StatusBar {
     id: status
     width: 700
+    anchors.fill: parent
 
     property string area: qsTr("Area: %L1 cells")
     property string gens: qsTr("Generations: %L1")
