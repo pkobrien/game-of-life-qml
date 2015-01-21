@@ -6,6 +6,10 @@ MenuBar {
     Menu {
         title: qsTr("&File")
         MenuItem {
+            text: qsTr("Acorn")
+            onTriggered: game.sample_acorn(board.columns, board.rows);
+        }
+        MenuItem {
             text: qsTr("E&xit")
             onTriggered: Qt.quit();
         }

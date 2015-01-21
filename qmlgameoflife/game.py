@@ -115,6 +115,11 @@ class Game(QObject):
         self.populated.emit()
         self.cycle()
 
+    @pyqtSlot(int, int)
+    def sample_acorn(self, width, height):
+        self.populate(width, height, 
+                      gol.offset(gol.ACORN, width//2, height//2))
+
     @pyqtSlot()
     def start(self, msec_delay=0):
         """Start cycling the grid using a timer with a delay of msec_delay."""
