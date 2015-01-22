@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Main application for PyQt QML Game Of Life.
+Main application for Game Of Life using PyQt and QML.
 
-Hosted at https://github.com/pkobrien/qml-game-of-life
+Hosted at https://github.com/pkobrien/game-of-life-qml
 """
 
 from PyQt5.QtGui import QGuiApplication

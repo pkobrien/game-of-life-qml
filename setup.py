@@ -4,7 +4,7 @@ from setuptools import setup
 from codecs import open
 from os import path
 
-import qmlgameoflife
+import gameoflifeqml
 
 here = path.abspath(path.dirname(__file__))
 
@@ -13,15 +13,15 @@ here = path.abspath(path.dirname(__file__))
 #     long_description = f.read()
 
 setup(
-    name='QMLGameOfLife',
+    name='GameOfLifeQML',
 
-    version=qmlgameoflife.__version__,
+    version=gameoflifeqml.__version__,
 
     description='PyQt QML Game Of Life',
     # long_description=long_description,
-    long_description='PyQt QML Game Of Life.',
+    long_description='Game Of Life using PyQt and QML.',
 
-    url='https://github.com/pkobrien/qml-game-of-life',
+    url='https://github.com/pkobrien/game-of-life-qml',
 
     author="Patrick K. O'Brien",
     author_email='patrick.keith.obrien@gmail.com',
@@ -40,7 +40,7 @@ setup(
         'Topic :: Games/Entertainment :: Puzzle Games',
     ],
 
-    keywords='pyqt qml conway game of life',
+    keywords='john conway game of life pyqt qml qt',
 
     extras_require={
         'test': ['pytest'],
