@@ -7,7 +7,10 @@ MenuBar {
         title: qsTr("&File")
         MenuItem {
             text: qsTr("Acorn")
-            onTriggered: game.sample_acorn(board.columns, board.rows);
+            onTriggered: {
+                board.setSize(200, 200);
+                game.sample_acorn(board.columns, board.rows);
+            }
         }
         MenuItem {
             text: qsTr("E&xit")

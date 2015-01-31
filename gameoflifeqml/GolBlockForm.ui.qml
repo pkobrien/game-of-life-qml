@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.1
 
 Rectangle {
     id: block
-    width: 30
-    height: 30
+    width: 5
+    height: 5
     state: "EMPTY"
 
     states: [

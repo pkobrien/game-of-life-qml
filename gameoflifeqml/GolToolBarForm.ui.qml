@@ -7,13 +7,28 @@ ToolBar {
     width: 300
 
     property alias cycleButton: cycleButton
-    property alias populateButton: populateButton
+    property alias random50Button: random50Button
+    property alias random100Button: random100Button
+    property alias random150Button: random150Button
+    property alias random200Button: random200Button
     property alias startButton: startButton
 
     RowLayout {
         ToolButton {
-            id: populateButton
-            text: qsTr("Populate")
+            id: random50Button
+            text: qsTr("Random 50x50")
+        }
+        ToolButton {
+            id: random100Button
+            text: qsTr("Random 100x100")
+        }
+        ToolButton {
+            id: random150Button
+            text: qsTr("Random 150x150")
+        }
+        ToolButton {
+            id: random200Button
+            text: qsTr("Random 200x200")
         }
         ToolButton {
             id: startButton

@@ -4,27 +4,19 @@ import QtQuick.Layouts 1.1
 
 Rectangle {
     id: board
-    width: 300
-    height: 300
+    width: 30
+    height: 30
+
+    property int columns: 0
+    property int rows: 0
 
     property alias blocks: grid.children
-
-    property int columns: 20
-    property int rows: 20
+    property alias grid: grid
 
     Grid {
         id: grid
         anchors.fill: parent
         columns: board.columns
         rows: board.rows
-
-        Repeater {
-            model: board.columns * board.rows
-
-            GolBlock {
-                width: board.width / board.columns
-                height: board.height / board.rows
-            }
-        }
     }
 }
