@@ -13,9 +13,9 @@ GolBlockForm {
         state = "NEWBORN";
         // New born cells always have 3 previously live neighbors.
         var liveNeighbors = game.previously_live_neighbors(index);
-        block.color.r = blocks[liveNeighbors[0]].color.r;
-        block.color.g = blocks[liveNeighbors[1]].color.g;
-        block.color.b = blocks[liveNeighbors[2]].color.b;
+        color.r = blocks[liveNeighbors[0]].color.r;
+        color.g = blocks[liveNeighbors[1]].color.g;
+        color.b = blocks[liveNeighbors[2]].color.b;
     }
 
     onDied: state = "DEAD";

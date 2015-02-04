@@ -6,7 +6,6 @@ Rectangle {
     id: block
     width: 5
     height: 5
-    state: "EMPTY"
 
     states: [
         State {
