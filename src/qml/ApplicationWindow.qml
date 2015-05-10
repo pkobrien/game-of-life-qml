@@ -1,22 +1,22 @@
 import QtQuick 2.4
 import QtQuick.Controls 1.3
-import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
+import "." as App
 
 ApplicationWindow {
-    title: qsTr("Game Of Life")
     width: 700
     height: 700
+    title: qsTr("Game Of Life")
     visible: true
 
-    menuBar: GolMenuBar { }
+    menuBar: App.MenuBar { }
 
-    toolBar: GolToolBar { }
+    toolBar: App.ToolBar { }
 
-    GolBoard {
+    App.Board {
         id: board
         anchors.fill: parent
     }
 
-    statusBar: GolStatusBar { }
+    statusBar: App.StatusBar { }
 }

@@ -1,16 +1,16 @@
 import QtQuick 2.4
 
-GolBlockForm {
+Rectangle {
     id: block
+
     border.color: Qt.lighter(color)
 
     signal born(int index, var blocks)
-    signal died
-    signal init
-    signal reset
+    signal died()
+    signal init()
+    signal reset()
 
     onBorn: {
-        state = "NEWBORN";
         // New born cells always have 3 previously live neighbors.
         var liveNeighbors = game.previously_live_neighbors(index);
         color.r = blocks[liveNeighbors[0]].color.r;
@@ -18,14 +18,9 @@ GolBlockForm {
         color.b = blocks[liveNeighbors[2]].color.b;
     }
 
-    onDied: state = "DEAD";
+    onDied: color = "#ffffff";
 
-    onInit: {
-        state = "LIVE";
-        color.r = Math.random();
-        color.g = Math.random();
-        color.b = Math.random();
-    }
+    onInit: color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1.0);
 
-    onReset: state = "EMPTY";
+    onReset: color = "#eeeeee";
 }
