@@ -1,6 +1,4 @@
 # Qt Creator
-*.pri
-*.pro
 *.pro.user
 *.qmlproject.user
 

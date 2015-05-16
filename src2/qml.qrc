@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Cell.qml</file>
+        <file>Grid.qml</file>
+        <file>Window.qml</file>
+    </qresource>
+</RCC>
