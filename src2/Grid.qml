@@ -12,8 +12,6 @@ Rectangle {
     property int generations: 0
     property alias interval: timer.interval
     property var living: []
-    property var newBorn: []
-    property var newDead: []
 
     color: "Silver"
 
@@ -32,13 +30,7 @@ Rectangle {
         if (!living.length) {
             return;
         }
-        if (generations > 1 && !newBorn.length && !newDead.length) {
-            return;
-        }
         generations += 1;
-        newBorn = [];
-        newDead = [];
-        var alive;
         var cell;
         var count;
         var i, j, len;
@@ -48,8 +40,8 @@ Rectangle {
         var nextgen = [];
         var recalc = [];
         for (i = 0, len = living.length; i < len; i++) {
-            alive = living[i];
-            nearby = [alive].concat(cells[alive].neighbors);
+            index = living[i];
+            nearby = [index].concat(cells[index].neighbors);
             for (j = 0; j < 9; j++) {
                 if (recalc.indexOf(nearby[j]) === -1) {
                     recalc.push(nearby[j]);
@@ -74,19 +66,17 @@ Rectangle {
                 if (nextgen.indexOf(index) === -1) {
                     nextgen.push(index);
                     if (living.indexOf(index) === -1) {
-                        newBorn.push(index);
+                        birth(index);
                     }
                 }
             }
         }
         for (i = 0, len = living.length; i < len; i++) {
-            alive = living[i];
-            if (nextgen.indexOf(alive) === -1) {
-                newDead.push(alive)
+            index = living[i];
+            if (nextgen.indexOf(index) === -1) {
+                death(index);
             }
         }
-        newBorn.forEach(birth);
-        newDead.forEach(death);
         living = nextgen;
     }
 
@@ -123,7 +113,7 @@ Rectangle {
     }
 
     function randomInt(min, max) {
-      return Math.floor(Math.random() * (max - min)) + min;
+        return Math.floor(Math.random() * (max - min)) + min;
     }
 
     function randomPopulation() {
